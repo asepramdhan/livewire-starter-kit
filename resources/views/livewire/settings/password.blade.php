@@ -20,6 +20,13 @@ new class extends Component {
             $validated = $this->validate([
                 'current_password' => ['required', 'string', 'current_password'],
                 'password' => ['required', 'string', Password::defaults(), 'confirmed'],
+            ], message: [
+                'current_password.required' => 'Kata sandi saat ini harus diisi.',
+                'current_password.string' => 'Kata sandi saat ini harus berupa teks.',
+                'current_password.current_password' => 'Kata sandi saat ini tidak cocok.',
+                'password.required' => 'Kata sandi baru harus diisi.',
+                'password.string' => 'Kata sandi baru harus berupa teks.',
+                'password.confirmed' => 'Kata sandi konfirmasi harus cocok.',
             ]);
         } catch (ValidationException $e) {
             $this->reset('current_password', 'password', 'password_confirmation');
@@ -38,41 +45,23 @@ new class extends Component {
 }; ?>
 
 <section class="w-full">
-    @include('partials.settings-heading')
+  @include('partials.settings-heading')
 
-    <x-settings.layout :heading="__('Update password')" :subheading="__('Ensure your account is using a long, random password to stay secure')">
-        <form wire:submit="updatePassword" class="mt-6 space-y-6">
-            <flux:input
-                wire:model="current_password"
-                :label="__('Current password')"
-                type="password"
-                required
-                autocomplete="current-password"
-            />
-            <flux:input
-                wire:model="password"
-                :label="__('New password')"
-                type="password"
-                required
-                autocomplete="new-password"
-            />
-            <flux:input
-                wire:model="password_confirmation"
-                :label="__('Confirm Password')"
-                type="password"
-                required
-                autocomplete="new-password"
-            />
+  <x-settings.layout :heading="__('Perbarui Kata Sandi')" :subheading="__('Pastikan akun Anda menggunakan kata sandi yang panjang dan acak untuk menjaga keamanan')">
+    <form wire:submit="updatePassword" class="mt-6 space-y-6">
+      <flux:input wire:model="current_password" :label="__('Kata sandi saat ini')" type="password" required autocomplete="current-password" />
+      <flux:input wire:model="password" :label="__('Kata sandi baru')" type="password" required autocomplete="new-password" />
+      <flux:input wire:model="password_confirmation" :label="__('Konfirmasi kata sandi')" type="password" required autocomplete="new-password" />
 
-            <div class="flex items-center gap-4">
-                <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full">{{ __('Save') }}</flux:button>
-                </div>
+      <div class="flex items-center gap-4">
+        <div class="flex items-center justify-end">
+          <flux:button variant="primary" type="submit" class="w-full">{{ __('Simpan') }}</flux:button>
+        </div>
 
-                <x-action-message class="me-3" on="password-updated">
-                    {{ __('Saved.') }}
-                </x-action-message>
-            </div>
-        </form>
-    </x-settings.layout>
+        <x-action-message class="me-3" on="password-updated">
+          {{ __('Disimpan.') }}
+        </x-action-message>
+      </div>
+    </form>
+  </x-settings.layout>
 </section>
